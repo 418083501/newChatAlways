@@ -21,9 +21,9 @@
     self.interactivePopGestureRecognizer.delegate = self;
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回"style:UIBarButtonItemStylePlain target:self action:nil];
-//    [self.navigationItem.backBarButtonItem setTintColor:[LCCommon getColor:@"999999"]];
+    [self.navigationItem.backBarButtonItem setTintColor:[LCCommon getColor:@"999999"]];
 #warning 这里缺张图
-    [self.navigationItem.backBarButtonItem setImage:[UIImage imageNamed:@""]];
+//    [self.navigationItem.backBarButtonItem setImage:[UIImage imageNamed:@""]];
 }
 
 /**

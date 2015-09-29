@@ -19,4 +19,8 @@
 
 #define EASE [EaseMob sharedInstance]
 
+#define HOST @"http://127.0.0.1"
+
+#define PORT @"8080"
+
 #endif /* define_h */

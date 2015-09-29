@@ -35,7 +35,8 @@
  */
 -(void)changeRootCtrlWithUser{
 //    int x = [LCLoginUser getLogUserFromeLocalDb];
-    int x = [LOGIN_USER isLogin];
+    int x = [LRLoginUser getLogUserFromeLocalDb];
+    LOGIN_USER;
     if (x) {
         
 //        [LC_USER_MANAGER getUserInfoWithCallBack:^(BOOL rs, NSString *__weak msg) {

@@ -35,7 +35,15 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"hehe"];
     }
     
+    cell.detailTextLabel.text = @"";
     
+    EMMessage *message = _dataArray[indexPath.row];
+    if (message.messageBodies.count != 0) {
+        id<IEMMessageBody> body = message.messageBodies[0];
+        if (body.messageBodyType == eMessageBodyType_Text) {
+            cell.detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
+        }
+    }
     
     return cell;
 }
@@ -60,6 +68,16 @@
     return .5;
 }
 
+-(void)didReceiveMessage:(EMMessage *)message
+{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    [_dataArray addObject:message];
+    [_tableView reloadData];
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+}
+
 -(void)buildLayout
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
@@ -67,7 +85,16 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
-    _dataArray = LOGIN_USER.messageList;
+}
+
+-(void)makeMessageFromLocal
+{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    
+    
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -78,6 +105,17 @@
         [self buildLayout];
         
         _isFirst = NO;
+    }
+    
+    LOGIN_USER.controller = self;
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (LOGIN_USER.controller == self) {
+        LOGIN_USER.controller = nil;
     }
 }
 

@@ -8,6 +8,7 @@
 
 #import "LRMainCtrl.h"
 #import "LRBaseUser.h"
+#import "LRChatCtrl.h"
 
 @interface LRMainCtrl ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -28,6 +29,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView cellForRowAtIndexPath:indexPath].selected = NO;
+    
+    LRChatCtrl *ctrl = [[LRChatCtrl alloc] init];
+    EMMessage *message = _dataArray[indexPath.row];
+    
+    NSString *myID = [NSString stringWithFormat:@"%lld",LOGIN_USER.ID];
+    if ([myID isEqualToString:message.from]) {
+        ctrl.chatID = message.to;
+    }else
+    {
+        ctrl.chatID = message.from;
+    }
+    
+    [self.navigationController pushViewController:ctrl animated:YES];
+    ctrl = nil;
+    message = nil;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

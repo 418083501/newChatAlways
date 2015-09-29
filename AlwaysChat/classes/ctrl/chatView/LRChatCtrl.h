@@ -10,4 +10,8 @@
 
 @interface LRChatCtrl : LCBaseCtrl
 
+@property (nonatomic,copy)NSString *chatID;
+
+-(void)didReceiveMessage:(EMMessage *)message;
+
 @end

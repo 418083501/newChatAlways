@@ -9,11 +9,27 @@
 #import "LRBaseUser.h"
 #import "EMMessage.h"
 
+@class LRChatCtrl;
+
 #define LOGIN_STATE_CHANGED @"LOGIN_STATE_CHANGED"
 
 #define LOGIN_USER [LRLoginUser instance]
 
 #define MAIN_REFRESH @"MAIN_REFRESH"
+
+
+#define AUTO_CODER(type,key) {\
+if (![LCCommon checkIsEmptyString:[coder decodeObjectForKey:key]]) {\
+self.type = [NSString stringWithFormat:@"%@",[coder decodeObjectForKey:key]];\
+}\
+}
+
+
+#define AUTO_ECODE(type,key) {\
+if (![LCCommon checkIsEmptyString:self.type]) {\
+[aCoder encodeObject:[NSString stringWithFormat:@"%@",self.type] forKey:key];\
+}\
+}
 
 typedef enum{
 
@@ -28,11 +44,21 @@ typedef enum{
 
 @property (nonatomic,strong)NSMutableArray *messageList;
 
+@property (nonatomic,assign)LRChatCtrl *controller;
+
 +(instancetype)instance;
 
 -(BOOL)isLogin;
 
 -(void)doEaseLogin;
+
+-(void)saveToLocal;
+
+-(void)logout;
+
++(NSString *)loginUserLocalPath;
+
++(BOOL)getLogUserFromeLocalDb;
 
 - (void)didReceiveOfflineMessages:(NSArray *)offlineMessages;
 
