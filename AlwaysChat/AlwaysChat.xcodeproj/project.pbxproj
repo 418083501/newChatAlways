@@ -20,6 +20,7 @@
 		166CA4231BBA317A00BDC576 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 166CA4221BBA317A00BDC576 /* libiconv.tbd */; };
 		166CA4251BBA318200BDC576 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 166CA4241BBA318200BDC576 /* libresolv.tbd */; };
 		166CA4271BBA318900BDC576 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 166CA4261BBA318900BDC576 /* libxml2.tbd */; };
+		166CA42B1BBA628C00BDC576 /* LRChatCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */; settings = {ASSET_TAGS = (); }; };
 		16D0EDB01BB947E300169466 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EDAF1BB947E300169466 /* main.m */; };
 		16D0EDB31BB947E300169466 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EDB21BB947E300169466 /* AppDelegate.m */; };
 		16D0EDBE1BB947E300169466 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16D0EDBD1BB947E300169466 /* Assets.xcassets */; };
@@ -153,6 +154,8 @@
 		166CA4221BBA317A00BDC576 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		166CA4241BBA318200BDC576 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		166CA4261BBA318900BDC576 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		166CA4291BBA628C00BDC576 /* LRChatCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRChatCtrl.h; sourceTree = "<group>"; };
+		166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRChatCtrl.m; sourceTree = "<group>"; };
 		16D0EDAB1BB947E300169466 /* AlwaysChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlwaysChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16D0EDAF1BB947E300169466 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16D0EDB11BB947E300169466 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -510,6 +513,16 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
+		166CA4281BBA627900BDC576 /* chat */ = {
+			isa = PBXGroup;
+			children = (
+				166CA4291BBA628C00BDC576 /* LRChatCtrl.h */,
+				166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */,
+			);
+			name = chat;
+			path = chatView;
+			sourceTree = "<group>";
+		};
 		16D0EDA21BB947E300169466 = {
 			isa = PBXGroup;
 			children = (
@@ -583,6 +596,7 @@
 		16D0EDCA1BB9484700169466 /* ctrl */ = {
 			isa = PBXGroup;
 			children = (
+				166CA4281BBA627900BDC576 /* chat */,
 				16D0EDFD1BB94CBD00169466 /* find */,
 				16D0EDFE1BB94CBD00169466 /* me */,
 				16D0EDD91BB948DC00169466 /* base */,
@@ -829,6 +843,7 @@
 				ABCB7A811BB96E4C00AE89D5 /* UIImageView+WebCache.m in Sources */,
 				166CA4171BBA2E4900BDC576 /* AppDelegate+EaseMobDebug.m in Sources */,
 				ABCB7A7A1BB96E4C00AE89D5 /* README.md in Sources */,
+				166CA42B1BBA628C00BDC576 /* LRChatCtrl.m in Sources */,
 				16D0EE011BB94CD800169466 /* LRMainCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
