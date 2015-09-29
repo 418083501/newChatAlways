@@ -56,6 +56,14 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.view.backgroundColor = [LCCommon getColor:Main_BackGround_Color];
+    
+    if (self.navigationController.childViewControllers.count == 1) {
+        self.view.height = [UIScreen mainScreen].bounds.size.height - 64 - 48;
+    }else if(self.navigationController.childViewControllers.count > 1)
+    {
+        self.view.height = [UIScreen mainScreen].bounds.size.height - 64;
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

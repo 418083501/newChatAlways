@@ -32,7 +32,7 @@ if (![LCCommon checkIsEmptyString:self.type]) {\
 }
 
 typedef enum{
-
+    login_state_none,
     login_state_ready,
     login_state_suc,
     login_state_fail

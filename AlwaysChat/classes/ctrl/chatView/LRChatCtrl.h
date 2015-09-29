@@ -12,6 +12,8 @@
 
 @property (nonatomic,copy)NSString *chatID;
 
+@property (nonatomic,strong)EMConversation *conversation;
+
 -(void)didReceiveMessage:(EMMessage *)message;
 
 @end

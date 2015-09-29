@@ -80,11 +80,13 @@
 
 -(void)buildLayout
 {
+    self.title = @"会话";
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
-    
+//    _dataArray = [self.conversation loadNumbersOfMessages:30 before:.0].mutableCopy;
+    _dataArray = [self.conversation loadNumbersOfMessages:30 withMessageId:nil].mutableCopy;
 }
 
 -(void)makeMessageFromLocal

@@ -32,14 +32,18 @@
     
     LRChatCtrl *ctrl = [[LRChatCtrl alloc] init];
     EMMessage *message = _dataArray[indexPath.row];
+
+    EMConversation *conversation = _dataArray[indexPath.row];
+    ctrl.chatID = conversation.chatter;
+    ctrl.conversation = conversation;
     
-    NSString *myID = [NSString stringWithFormat:@"%lld",LOGIN_USER.ID];
-    if ([myID isEqualToString:message.from]) {
-        ctrl.chatID = message.to;
-    }else
-    {
-        ctrl.chatID = message.from;
-    }
+//    NSString *myID = [NSString stringWithFormat:@"%lld",LOGIN_USER.ID];
+//    if ([myID isEqualToString:message.from]) {
+//        ctrl.chatID = message.to;
+//    }else
+//    {
+//        ctrl.chatID = message.from;
+//    }
     
     [self.navigationController pushViewController:ctrl animated:YES];
     ctrl = nil;
@@ -53,7 +57,16 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"hehe"];
     }
     
-    EMMessage *message = _dataArray[indexPath.row];
+    EMConversation *conversation = _dataArray[indexPath.row];
+    
+    EMMessage *message = nil;
+    for (EMMessage *ee in LOGIN_USER.messageList) {
+        if ([ee.from isEqualToString:conversation.chatter]) {
+            message = ee;
+        }
+    }
+    
+//    EMMessage *message = _dataArray[indexPath.row];
 //    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
     cell.textLabel.text = message.from;
     
@@ -92,9 +105,7 @@
         [self buildLayout];
         _isFirst = NO;
     }
-    if (LOGIN_USER.state == login_state_fail && LOGIN_USER.isLogin) {
-        [LOGIN_USER doEaseLogin];
-    }
+    
 }
 
 -(void)buildLayout
@@ -104,7 +115,8 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
-    _dataArray = LOGIN_USER.messageList;
+//    _dataArray = LOGIN_USER.messageList;
+    _dataArray = [EASE.chatManager conversations].mutableCopy;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageCallBack:) name:MAIN_REFRESH object:nil];
     
@@ -112,7 +124,8 @@
 
 -(void)onMessageCallBack:(NSNotification *)notification
 {
-    _dataArray = LOGIN_USER.messageList;
+//    _dataArray = LOGIN_USER.messageList;
+    _dataArray = [EASE.chatManager conversations].mutableCopy;
     [_tableView reloadData];
 }
 
@@ -136,6 +149,7 @@
     
     if (state == login_state_suc) {
         self.title = @"消息";
+        [self onMessageCallBack:notification];
     }
 }
 

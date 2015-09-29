@@ -28,7 +28,7 @@ static LRLoginUser *_user;
     self = [super init];
     if (self) {
         [self makeSelfWithLocal];
-        self.state = login_state_ready;
+        self.state = login_state_none;
         if ([self isLogin]) {
             [self doEaseLogin];
         }
@@ -80,6 +80,10 @@ static LRLoginUser *_user;
 -(void)doEaseLogin
 {
     
+    if (self.state != login_state_none) {
+        return;
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(login_state_ready)}];
     self.state = login_state_ready;
     
@@ -91,6 +95,18 @@ static LRLoginUser *_user;
             NSLog(@"登录成功");
             [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(login_state_suc)}];
             self.state = login_state_suc;
+            
+            //设置是否自动登录
+            [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
+            
+            // 旧数据转换 (如果您的sdk是由2.1.2版本升级过来的，需要家这句话)
+            [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
+            //获取数据库中数据
+            [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
+            
+            //获取群组列表
+            [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsList];
+            
         }else
         {
                 
@@ -145,6 +161,7 @@ static LRLoginUser *_user;
         self.messageList = [NSMutableArray array];
         [self.messageList addObject:message];
     }
+    
     NSLock *lock = [[NSLock alloc] init];
     [lock lock];
     for (EMMessage *em in self.messageList) {
