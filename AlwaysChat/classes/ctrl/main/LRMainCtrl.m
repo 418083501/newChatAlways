@@ -60,11 +60,17 @@
     EMConversation *conversation = _dataArray[indexPath.row];
     
     EMMessage *message = nil;
-    for (EMMessage *ee in LOGIN_USER.messageList) {
-        if ([ee.from isEqualToString:conversation.chatter]) {
-            message = ee;
-        }
+//    for (EMMessage *ee in LOGIN_USER.messageList) {
+//        if ([ee.from isEqualToString:conversation.chatter]) {
+//            message = ee;
+//        }
+//    }
+    
+    NSArray *messages = [conversation loadNumbersOfMessages:1 withMessageId:nil];
+    if (messages.count > 0) {
+        message = messages[0];
     }
+    
     
 //    EMMessage *message = _dataArray[indexPath.row];
 //    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
@@ -73,6 +79,9 @@
     if (message.messageBodies.count != 0) {
         id<IEMMessageBody> body = message.messageBodies[0];
         cell.detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
+    }else
+    {
+        cell.detailTextLabel.text = nil;
     }
     
     return cell;

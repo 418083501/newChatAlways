@@ -87,6 +87,7 @@
     [self.view addSubview:_tableView];
 //    _dataArray = [self.conversation loadNumbersOfMessages:30 before:.0].mutableCopy;
     _dataArray = [self.conversation loadNumbersOfMessages:30 withMessageId:nil].mutableCopy;
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 -(void)makeMessageFromLocal
