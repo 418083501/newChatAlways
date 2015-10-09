@@ -93,8 +93,7 @@ static LRLoginUser *_user;
         if (loginInfo && !error)
         {
             NSLog(@"登录成功");
-            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(login_state_suc)}];
-            self.state = login_state_suc;
+            
             
             //设置是否自动登录
             [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
@@ -106,6 +105,9 @@ static LRLoginUser *_user;
             
             //获取群组列表
             [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsList];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(login_state_suc)}];
+            self.state = login_state_suc;
             
         }else
         {

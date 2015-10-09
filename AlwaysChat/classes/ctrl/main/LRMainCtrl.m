@@ -31,23 +31,14 @@
     [tableView cellForRowAtIndexPath:indexPath].selected = NO;
     
     LRChatCtrl *ctrl = [[LRChatCtrl alloc] init];
-    EMMessage *message = _dataArray[indexPath.row];
 
     EMConversation *conversation = _dataArray[indexPath.row];
     ctrl.chatID = conversation.chatter;
     ctrl.conversation = conversation;
     
-//    NSString *myID = [NSString stringWithFormat:@"%lld",LOGIN_USER.ID];
-//    if ([myID isEqualToString:message.from]) {
-//        ctrl.chatID = message.to;
-//    }else
-//    {
-//        ctrl.chatID = message.from;
-//    }
-    
     [self.navigationController pushViewController:ctrl animated:YES];
     ctrl = nil;
-    message = nil;
+    conversation = nil;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -59,22 +50,11 @@
     
     EMConversation *conversation = _dataArray[indexPath.row];
     
-    EMMessage *message = nil;
-//    for (EMMessage *ee in LOGIN_USER.messageList) {
-//        if ([ee.from isEqualToString:conversation.chatter]) {
-//            message = ee;
-//        }
-//    }
+    EMMessage *message = [conversation latestMessage];
     
-    NSArray *messages = [conversation loadNumbersOfMessages:1 withMessageId:nil];
-    if (messages.count > 0) {
-        message = messages[0];
-    }
-    
-    
-//    EMMessage *message = _dataArray[indexPath.row];
 //    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
-    cell.textLabel.text = message.from;
+    
+    cell.textLabel.text = conversation.chatter;
     
     if (message.messageBodies.count != 0) {
         id<IEMMessageBody> body = message.messageBodies[0];
@@ -115,6 +95,8 @@
         _isFirst = NO;
     }
     
+    [_tableView reloadData];
+    
 }
 
 -(void)buildLayout
@@ -125,7 +107,9 @@
     [self.view addSubview:_tableView];
     
 //    _dataArray = LOGIN_USER.messageList;
-    _dataArray = [EASE.chatManager conversations].mutableCopy;
+//    _dataArray = [EASE.chatManager conversations].mutableCopy;
+    
+//    [EASE.chatManager loadAllConversationsFromDatabaseWithAppend2Chat:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageCallBack:) name:MAIN_REFRESH object:nil];
     
@@ -133,7 +117,8 @@
 
 -(void)onMessageCallBack:(NSNotification *)notification
 {
-//    _dataArray = LOGIN_USER.messageList;
+//    _dataArray = LOGIN_USER.messageList;    [EASE.chatManager loadAllConversationsFromDatabaseWithAppend2Chat:YES].mutableCopy;
+    
     _dataArray = [EASE.chatManager conversations].mutableCopy;
     [_tableView reloadData];
 }
@@ -142,6 +127,7 @@
     [super viewDidLoad];
     _isFirst = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLoginStateChanged:) name:LOGIN_STATE_CHANGED object:nil];
+    [self onMessageCallBack:nil];
     // Do any additional setup after loading the view.
 }
 

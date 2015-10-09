@@ -46,8 +46,11 @@
 {
     UINavigationBar *appearance = [UINavigationBar appearance];
 
-    appearance.opaque = NO;
-    appearance.translucent = NO;
+    if ([UIDevice currentDevice].systemVersion.integerValue >= 8) {
+        appearance.opaque = NO;
+        appearance.translucent = NO;
+    }
+    
     // 设置导航栏背景
     [appearance setBarTintColor:[UIColor whiteColor]];
     [appearance setTintColor:[UIColor whiteColor]];

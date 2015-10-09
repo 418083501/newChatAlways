@@ -31,7 +31,6 @@
     _connectionState = eEMConnectionConnected;
     
     [self registerRemoteNotification];
-    
 
 #warning SDK注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
     NSString *apnsCertName = nil;
@@ -46,6 +45,8 @@
                                            apnsCertName:apnsCertName
                                             otherConfig:@{kSDKConfigEnableConsoleLogger:@YES}];
     }
+    [EASE.chatManager setIsAutoLoginEnabled:NO];
+    [EASE.chatManager disableAutoLogin];
     
     // 登录成功后，自动去取好友列表
     // SDK获取结束后，会回调
@@ -165,12 +166,12 @@
 // 注册deviceToken失败，此处失败，与环信SDK无关，一般是您的环境配置或者证书配置有误
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [[EaseMob sharedInstance] application:application didFailToRegisterForRemoteNotificationsWithError:error];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", Fail to register apns)
-                                                    message:error.description
-                                                   delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
-                                          otherButtonTitles:nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", Fail to register apns)
+//                                                    message:error.description
+//                                                   delegate:nil
+//                                          cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
+//                                          otherButtonTitles:nil];
+//    [alert show];
 }
 
 // 注册推送
@@ -233,6 +234,7 @@
 // 开始自动登录回调
 -(void)willAutoLoginWithInfo:(NSDictionary *)loginInfo error:(EMError *)error
 {
+    return;
     UIAlertView *alertView = nil;
     if (error) {
         alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
@@ -256,6 +258,7 @@
 // 结束自动登录回调
 -(void)didAutoLoginWithInfo:(NSDictionary *)loginInfo error:(EMError *)error
 {
+    return;
     UIAlertView *alertView = nil;
     if (error) {
         alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.errorAutoLogin", @"Automatic logon failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];

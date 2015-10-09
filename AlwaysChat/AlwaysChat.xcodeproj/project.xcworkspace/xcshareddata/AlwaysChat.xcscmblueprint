@@ -1,5 +1,4 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "541FC5A448990A4DD5E51072E3E6BB7E1676EA55",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "b3ea32e5-604c-4fca-b5db-6ae888a3e4b3++5760" : {
 
@@ -11,12 +10,12 @@
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DCBA00C1-1FC7-461E-BB31-3CA9CF102306",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "b3ea32e5-604c-4fca-b5db-6ae888a3e4b3++5760" : "newChatAlways\/AlwaysChat\/classes\/libs\/SDWebImage\/",
-    "541FC5A448990A4DD5E51072E3E6BB7E1676EA55" : "newChatAlways\/"
+    "b3ea32e5-604c-4fca-b5db-6ae888a3e4b3++5760" : "AlwaysChat\/classes\/libs\/SDWebImage\/",
+    "541FC5A448990A4DD5E51072E3E6BB7E1676EA55" : ""
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AlwaysChat",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AlwaysChat\/AlwaysChat.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AlwaysChat.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/418083501\/newChatAlways.git",
