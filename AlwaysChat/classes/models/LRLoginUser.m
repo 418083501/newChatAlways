@@ -9,6 +9,11 @@
 #import "LRLoginUser.h"
 #import "LRChatCtrl.h"
 
+#import "LCLoginCtrl.h"
+#import "LCNavigationController.h"
+
+#import "AppDelegate.h"
+
 @implementation LRLoginUser
 
 
@@ -27,7 +32,6 @@ static LRLoginUser *_user;
 {
     self = [super init];
     if (self) {
-        [self makeSelfWithLocal];
         self.state = login_state_none;
         if ([self isLogin]) {
             [self doEaseLogin];
@@ -54,6 +58,14 @@ static LRLoginUser *_user;
 //    }
     [LCCommon deleteWithFilepath:[LRLoginUser loginUserLocalPath]];
     
+    LCLoginCtrl *ctrl = [[LCLoginCtrl alloc] init];
+    LCNavigationController *nav = [[LCNavigationController alloc] initWithRootViewController:ctrl];
+    LCAppDelegate.window.rootViewController = nav;
+//    LCAppDelegate.window
+    [nav setNavigationBarHidden:YES];
+    nav = nil;
+    ctrl = nil;
+    
     _user = nil;
     
 }
@@ -71,6 +83,12 @@ static LRLoginUser *_user;
         
         NSLog(@"有新登录缓存");
         NSLog(@"uid=%lld",_user.ID);
+        
+        _user.state = login_state_none;
+        if ([_user isLogin]) {
+            [_user doEaseLogin];
+        }
+        
         
         return YES;
     }
@@ -96,7 +114,7 @@ static LRLoginUser *_user;
             
             
             //设置是否自动登录
-            [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
+            [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
             
             // 旧数据转换 (如果您的sdk是由2.1.2版本升级过来的，需要家这句话)
             [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
@@ -129,12 +147,12 @@ static LRLoginUser *_user;
 
 -(void)makeSelfWithLocal
 {
-    self.ID = 10000;
-    self.name = @"lulu";
-    self.facePath = @"http://img5.duitang.com/uploads/item/201503/26/20150326161657_aL8FW.jpeg";
-    self.destrib = @"鹿哥霸气";
-    self.sex = @"男";
-    [self saveToLocal];
+//    self.ID = 10000;
+//    self.name = @"lulu";
+//    self.facePath = @"http://img5.duitang.com/uploads/item/201503/26/20150326161657_aL8FW.jpeg";
+//    self.destrib = @"鹿哥霸气";
+//    self.sex = @"男";
+//    [self saveToLocal];
 }
 
 -(BOOL)isLogin
@@ -222,7 +240,7 @@ static LRLoginUser *_user;
     self = [self init];
     if (self) {
 //        AUTO_CODER(ID, @"ID");
-        if (self.ID != 0) {
+        if ([[coder decodeObjectForKey:@"ID"] longLongValue]) {
             self.ID = [[coder decodeObjectForKey:@"ID"] longLongValue];
         }else
         {
@@ -232,6 +250,7 @@ static LRLoginUser *_user;
         AUTO_CODER(name, @"name");
 //        AUTO_CODER(token, @"token");
         self.messageList = [[coder decodeObjectForKey:@"messageList"] mutableCopy];
+        AUTO_CODER(token, @"token");
     }
     return self;
 }
@@ -247,9 +266,28 @@ static LRLoginUser *_user;
     }
     AUTO_ECODE(facePath, @"facePath");
     AUTO_ECODE(name, @"name");
+    AUTO_ECODE(token, @"token");
 //    AUTO_ECODE(token, @"token");
 //    AUTO_ECODE(userDept, @"userDept");
     [aCoder encodeObject:self.messageList forKey:@"messageList"];
+}
+
+-(void)parseDataWithDict:(NSDictionary *)dict
+{
+    
+    self.ID = [dict[@"ID"] longLongValue];
+    self.token = dict[@"token"];
+    self.name = dict[@"name"];
+    self.location = dict[@"location"];
+    self.username = dict[@"username"];
+    self.sex = dict[@"sex"];
+    self.facePath = dict[@"facePath"];
+    
+    [self saveToLocal];
+    if ([self isLogin]) {
+        self.state = login_state_none;
+        [self doEaseLogin];
+    }
 }
 
 @end

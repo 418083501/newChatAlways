@@ -39,9 +39,9 @@
     LOGIN_USER;
     if (x) {
         
-//        [LC_USER_MANAGER getUserInfoWithCallBack:^(BOOL rs, NSString *__weak msg) {
-//            
-//        }];
+        [LC_USER_MANAGER getUserInfoWithCallBack:^(BOOL rs, NSString *__weak msg) {
+            
+        }];
         
         LCTabBarViewController *tab = [[LCTabBarViewController alloc]init];
         
@@ -49,7 +49,7 @@
         
     }else
     {
-//        [LC_LOGINUSER logout];
+        [LOGIN_USER logout];
     }
 }
 

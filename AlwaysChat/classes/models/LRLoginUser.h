@@ -9,6 +9,10 @@
 #import "LRBaseUser.h"
 #import "EMMessage.h"
 
+
+
+#import "LCUserHttpManager.h"
+
 @class LRChatCtrl;
 
 #define LOGIN_STATE_CHANGED @"LOGIN_STATE_CHANGED"
@@ -16,6 +20,8 @@
 #define LOGIN_USER [LRLoginUser instance]
 
 #define MAIN_REFRESH @"MAIN_REFRESH"
+
+#define LCAppDelegate ((AppDelegate *)[UIApplication sharedApplication].delegate)
 
 
 #define AUTO_CODER(type,key) {\
@@ -46,6 +52,8 @@ typedef enum{
 
 @property (nonatomic,assign)LRChatCtrl *controller;
 
+@property (nonatomic,copy)NSString *token;
+
 +(instancetype)instance;
 
 -(BOOL)isLogin;
@@ -65,5 +73,7 @@ typedef enum{
 -(void)didReceiveMessage:(EMMessage *)message;
 
 -(NSString *)textWithMessageBody:(id<IEMMessageBody>)body;
+
+-(void)parseDataWithDict:(NSDictionary *)dict;
 
 @end
