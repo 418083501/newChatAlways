@@ -16,4 +16,6 @@
 
 -(void)didReceiveMessage:(EMMessage *)message;
 
+-(void)didFetchMessageThumbnail:(EMMessage *)aMessage;
+
 @end

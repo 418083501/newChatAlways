@@ -274,7 +274,6 @@ static LRLoginUser *_user;
 
 -(void)parseDataWithDict:(NSDictionary *)dict
 {
-    
     self.ID = [dict[@"ID"] longLongValue];
     self.token = dict[@"token"];
     self.name = dict[@"name"];

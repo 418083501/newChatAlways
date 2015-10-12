@@ -35,7 +35,7 @@
             
 //            DISSMISS_ERR(@"您的账号再其他地方登录");
             
-//            [LC_LOGINUSER logout];
+            [LOGIN_USER logout];
             
             return NO;
         }
@@ -88,8 +88,9 @@
     
     NSMutableDictionary *paramas = [NSMutableDictionary dictionary];
     paramas[@"ID"] = @(LOGIN_USER.ID);
-    paramas[@"token"] = LOGIN_USER.token;
-    
+    if (![LCCommon checkIsEmptyString:LOGIN_USER.token]) {
+        paramas[@"token"] = LOGIN_USER.token;
+    }
     
     [LCHttpTool get:url params:paramas success:^(id responseObj) {
         
@@ -105,6 +106,57 @@
             callBack(NO,dict[@"result"]);
         }
         
+    } failure:^(NSError *error) {
+        callBack(NO,@"链接失败");
+    }];
+    
+}
+
+-(void)getBaseUsersWithIds:(NSArray *)ids callBack:(NetObjLCallBackBlock)callBack
+{
+    //GetBasicUser
+    NSString *url = [NSString stringWithFormat:@"%@%@",HOST_NAME,@"GetBasicUser"];
+    
+    NSMutableDictionary *paramas = [NSMutableDictionary dictionary];
+    paramas[@"uid"] = @(LOGIN_USER.ID);
+    if (![LCCommon checkIsEmptyString:LOGIN_USER.token]) {
+        paramas[@"token"] = LOGIN_USER.token;
+    }
+    NSString *idStr = @"";
+    for (int i = 0; i<ids.count; i++) {
+        idStr = [idStr stringByAppendingFormat:@"%@",ids[i]];
+        if (i != ids.count - 1) {
+            idStr = [idStr stringByAppendingString:@","];
+        }
+    }
+    
+    [LCHttpTool post:url params:paramas success:^(id responseObj) {
+        NSDictionary *dict = responseObj;
+        
+        if ([self parseIsDoneWithId:dict]) {
+            
+            NSMutableArray *result = [NSMutableArray array];
+            
+            NSArray *data = dict[@"data"];
+            for (int i = 0; i<data.count; i++) {
+                NSDictionary *dict = data[i];
+                LRBaseUser *user = [[LRBaseUser alloc] init];
+                [user parseDataWithDict:dict];
+                [result addObject:user];
+                user = nil;
+            }
+            
+            if (!LOGIN_USER.personArray) {
+                LOGIN_USER.personArray = [NSMutableArray array];
+                [LOGIN_USER.personArray removeObjectsInArray:result];
+                [LOGIN_USER.personArray addObjectsFromArray:result];
+            }
+            
+            callBack(YES,result);
+        }else
+        {
+            callBack(NO,dict[@"result"]);
+        }
     } failure:^(NSError *error) {
         callBack(NO,@"链接失败");
     }];

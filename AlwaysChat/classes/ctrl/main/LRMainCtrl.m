@@ -52,7 +52,11 @@
     
     EMMessage *message = [conversation latestMessage];
     
-//    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
+    LRBaseUser *user = [[LRBaseUser alloc] init];
+    user.ID = conversation.chatter.longLongValue;
+    user = [LOGIN_USER.personArray objectAtIndex:[LOGIN_USER.personArray indexOfObject:user]];
+    
+    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
     
     cell.textLabel.text = conversation.chatter;
     
@@ -93,6 +97,8 @@
     if (_isFirst) {
         [self buildLayout];
         _isFirst = NO;
+        
+        
     }
     
     [_tableView reloadData];
@@ -121,6 +127,17 @@
     
     _dataArray = [EASE.chatManager conversations].mutableCopy;
     [_tableView reloadData];
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (EMConversation *conversation in _dataArray) {
+        [array addObject:conversation.chatter];
+    }
+    
+    [LC_USER_MANAGER getBaseUsersWithIds:array callBack:^(BOOL rs, NSObject *__weak obj) {
+        if (rs) {
+            [_tableView reloadData];
+        }
+    }];
 }
 
 - (void)viewDidLoad {

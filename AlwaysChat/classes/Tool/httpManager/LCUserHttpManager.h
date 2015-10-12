@@ -27,4 +27,6 @@ typedef void (^NetProgressCallBackBlock)(double pro);
 
 -(void)getUserInfoWithCallBack:(NetBOOLCallBackBlock)callBack;
 
+-(void)getBaseUsersWithIds:(NSArray *)ids callBack:(NetObjLCallBackBlock)callBack;
+
 @end

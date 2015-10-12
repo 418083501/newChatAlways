@@ -80,7 +80,7 @@
 {
     self.title = @"登录";
     
-    CGFloat top = 626/2;
+    CGFloat top = 300/2;
     CGFloat leftSpace = 20;
     CGFloat height = 118/2;
 //    CGFloat vSpace = 20;

@@ -20,4 +20,13 @@
     
 }
 
+-(void)parseDataWithDict:(NSDictionary *)dict
+{
+    self.ID = [dict[@"ID"] longLongValue];
+    self.name = dict[@"name"];
+    self.location = dict[@"location"];
+    self.sex = dict[@"sex"];
+    self.facePath = dict[@"facePath"];
+}
+
 @end

@@ -13,6 +13,8 @@
 #import "AppDelegate+EaseMob.h"
 #import "AppDelegate+EaseMobDebug.h"
 
+#import "LRChatCtrl.h"
+
 /**
  *  本类中做了EaseMob初始化和推送等操作
  */
@@ -393,6 +395,31 @@
 {
     _connectionState = connectionState;
 //    [self.mainController networkChanged:connectionState];
+}
+
+//-(void)didFetchMessageThumbnail:(EMMessage *)aMessage error:(EMError *)error
+//{
+//    NSLog(@"didFetchMessageThumbnail:%@",aMessage);
+//    if (!error) {
+//        if (LOGIN_USER.controller) {
+//            [LOGIN_USER.controller didFetchMessageThumbnail:aMessage];
+//        }
+//    }else
+//    {
+//        [EASE.chatManager asyncFetchMessageThumbnail:aMessage progress:nil];
+//    }
+//}
+
+-(void)didMessageAttachmentsStatusChanged:(EMMessage *)message error:(EMError *)error
+{
+    if (!error) {
+        if (LOGIN_USER.controller) {
+            [LOGIN_USER.controller didFetchMessageThumbnail:message];
+        }
+    }else
+    {
+        [EASE.chatManager asyncFetchMessageThumbnail:message progress:nil];
+    }
 }
 
 // 打印收到的apns信息

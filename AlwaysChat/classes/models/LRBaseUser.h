@@ -24,4 +24,6 @@
 
 @property (nonatomic,copy)NSString *username;
 
+-(void)parseDataWithDict:(NSDictionary *)dict;
+
 @end

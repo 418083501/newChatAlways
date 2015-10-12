@@ -10,7 +10,9 @@
 
 #define SHADOW_TAG @"SHADOW_TAG".hash
 
-@interface LRChatCtrl ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,IEMChatProgressDelegate>
+#define TOOLS_HEIGHT (200)
+
+@interface LRChatCtrl ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,IEMChatProgressDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     BOOL _isFirst;
     UITableView *_tableView;
@@ -20,13 +22,145 @@
 }
 @property (nonatomic,strong)UIView *bottomView;
 
+@property (nonatomic,strong)UIView *toolsView;
+
 @end
 
 @implementation LRChatCtrl
 
+-(UIView *)toolsView
+{
+    if (!_toolsView) {
+        _toolsView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, TOOLS_HEIGHT)];
+        
+        CGFloat width = _toolsView.width / 3;
+        
+        CGFloat height = _toolsView.height / 2;
+        
+        NSArray *toolArray = @[@"照片",@"相册",@"位置",@"文件"];
+        
+        for (int i = 0; i<toolArray.count; i++) {
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i%3 * width, i/3 * height, width, height)];
+            view.layer.borderWidth = 1;
+            view.layer.borderColor = [UIColor blackColor].CGColor;
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, view.height - 20, view.width, 20)];
+            label.text = toolArray[i];
+            label.textAlignment = NSTextAlignmentCenter;
+            [view addSubview:label];
+            
+            view.tag = i + 1000;
+            view.userInteractionEnabled = YES;
+            [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doToolsClick:)]];
+            [_toolsView addSubview:view];
+            view = nil;
+        }
+        
+    }
+    return _toolsView;
+}
+
+-(void)doToolsClick:(UIGestureRecognizer *)sender
+{
+    
+    UIView *view = sender.view;
+    
+    switch (view.tag - 1000) {
+        case 0:
+        {
+            [self doPhoto:UIImagePickerControllerSourceTypeCamera];
+        }
+            break;
+        case 1:
+        {
+            [self doPhoto:UIImagePickerControllerSourceTypePhotoLibrary];
+        }
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)doPhoto:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    //设置拍照后的图片可被编辑
+    picker.allowsEditing = YES;
+    picker.sourceType = sourceType;
+    [self presentViewController:picker animated:YES completion:nil];
+    [self dismissTools];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    [self imagePickerControllerDidCancel:picker];
+    
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    if (image) {
+        
+        EMChatImage *imgChat = [[EMChatImage alloc] initWithUIImage:image displayName:@"displayName"];
+        EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithChatObject:imgChat];
+        
+        // 生成message
+        EMMessage *message = [[EMMessage alloc] initWithReceiver:@"6001" bodies:@[body]];
+        message.messageType = (EMMessageType)self.conversation.conversationType; // 设置为单聊消息
+        
+        EMError *error;
+        
+        [EASE.chatManager asyncSendMessage:message progress:self prepare:^(EMMessage *message, EMError *error) {
+            
+        } onQueue:dispatch_get_main_queue() completion:^(EMMessage *message1, EMError *error) {
+            
+        } onQueue:dispatch_get_main_queue()];
+        
+        if (error) {
+            NSLog(@"error=%@",error);
+        }
+        
+        [_dataArray addObject:message];
+        
+        [_tableView reloadData];
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+        
+    }else
+    {
+        
+    }
+    
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)setProgress:(float)progress forMessage:(EMMessage *)message forMessageBody:(id<IEMMessageBody>)messageBody
 {
     
+}
+
+-(void)didFetchMessageThumbnail:(EMMessage *)aMessage
+{
+    NSInteger index = [_dataArray indexOfObject:aMessage];
+    if (index != NSNotFound) {
+        
+        NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+        
+        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:path];
+        if (cell) {
+            
+            [_tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+        }
+        
+    }
 }
 
 -(UIView *)bottomView
@@ -45,8 +179,54 @@
         [_bottomView addSubview:_textField];
         _textField.delegate = self;
         
+        
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(_textField.x + _textField.width, 0, 45, 45)];
+        btn.backgroundColor = [UIColor redColor];
+        [btn addTarget:self action:@selector(changeTools) forControlEvents:UIControlEventTouchUpInside];
+        [_bottomView addSubview:btn];
+        btn = nil;
+        
     }
     return _bottomView;
+}
+
+-(void)changeTools
+{
+    if (self.toolsView.y == self.view.height - self.toolsView.height) {
+        [self dismissTools];
+    }else
+    {
+        [self showTools];
+    }
+}
+
+-(void)showTools
+{
+    if (_textField.isFirstResponder) {
+        [_textField resignFirstResponder];
+    }
+    [_tableView addGestureRecognizer:_gesture];
+    [UIView animateWithDuration:.3 animations:^{
+        
+        self.bottomView.y = self.view.height - self.bottomView.height - self.toolsView.height;
+        _tableView.height = self.bottomView.y;
+        self.toolsView.y = self.view.height - self.toolsView.height;
+        
+    } completion:^(BOOL finished) {
+        [self didReceiveMessage:nil];
+    }];
+}
+
+-(void)dismissTools
+{
+    [_tableView removeGestureRecognizer:_gesture];
+    [UIView animateWithDuration:.3 animations:^{
+        self.bottomView.y = self.view.height - self.bottomView.height;
+        _tableView.height = self.bottomView.y;
+        self.toolsView.y = self.view.height;
+    } completion:^(BOOL finished) {
+        [self didReceiveMessage:nil];
+    }];
 }
 
 - (void)dealloc
@@ -59,23 +239,70 @@
     [tableView cellForRowAtIndexPath:indexPath].selected = NO;
 }
 
+#define IMAGE_TAG @"IMAGE_TAG".hash
+
+#define TEXTLABEL_TAG @"TEXTLABEL_TAG".hash
+
+#define DETAIL_TAG @"DETAIL_TAG".hash
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"hehe"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"hehe"];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 5, 200, 20)];
+        label.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:label];
+        label.tag = TEXTLABEL_TAG;
+        
+        UILabel *detailTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(label.x, label.height + label.y + 3, (self.view.width - label.x *2), 13)];
+        detailTextLabel.font = [UIFont systemFontOfSize:12];
+        detailTextLabel.tag = DETAIL_TAG;
+        [cell.contentView addSubview:detailTextLabel];
+        
     }
     
-    cell.detailTextLabel.text = @"";
+    
+    
+    UILabel *textLabel = (UILabel *)[cell.contentView viewWithTag:TEXTLABEL_TAG];
+    UILabel *detailTextLabel = (UILabel *)[cell.contentView viewWithTag:DETAIL_TAG];
+    
+    detailTextLabel.text = @" ";
+    
+    [[cell.contentView viewWithTag:IMAGE_TAG] removeFromSuperview];
     
     EMMessage *message = _dataArray[indexPath.row];
     if (message.messageBodies.count != 0) {
         id<IEMMessageBody> body = message.messageBodies[0];
         if (body.messageBodyType == eMessageBodyType_Text) {
-            cell.detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
+            detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
         }
+        
+        if (body.messageBodyType == eMessageBodyType_Image) {
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(textLabel.x, textLabel.y + textLabel.height + 5, 100, 100)];
+            imageView.layer.masksToBounds = YES;
+            imageView.tag = IMAGE_TAG;
+            EMImageMessageBody *chatImage = (EMImageMessageBody *)body;
+            
+            if (![LCCommon checkIsEmptyString:chatImage.thumbnailLocalPath]) {
+                
+                imageView.image = [UIImage imageWithContentsOfFile:chatImage.thumbnailLocalPath];
+                
+            }else
+            {
+                
+            }
+            
+            [cell.contentView addSubview:imageView];
+            imageView = nil;
+            
+        }
+        
     }
-    cell.textLabel.text = message.from;
+    textLabel.text = message.from;
     
     return cell;
 }
@@ -87,6 +314,16 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    EMMessage *message = _dataArray[indexPath.row];
+    
+    if (message.messageBodies.count != 0) {
+        id<IEMMessageBody> body = message.messageBodies[0];
+        if (body.messageBodyType == eMessageBodyType_Image) {
+            return 140;
+        }
+    }
+    
     return 45;
 }
 
@@ -143,6 +380,7 @@
     _dataArray = [self.conversation loadNumbersOfMessages:20 withMessageId:nil].mutableCopy;
     [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
     _gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onShadowTouched:)];
+    [self.view addSubview:self.toolsView];
 }
 
 -(void)makeMessageFromLocal
@@ -193,7 +431,7 @@
      Animate the resize so that it's in sync with the disappearance of the keyboard.
      */
     
-    
+    [self dismissTools];
     
 //    [[self.view viewWithTag:SHADOW_TAG] removeFromSuperview];
     [_tableView removeGestureRecognizer:_gesture];
@@ -210,6 +448,9 @@
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    
+    
+    [self dismissTools];
     
     NSDictionary *userInfo = [notification userInfo];
     // Get the origin of the keyboard when it's displayed.
@@ -263,10 +504,8 @@
     [EASE.chatManager asyncSendMessage:message progress:self prepare:^(EMMessage *message, EMError *error) {
         
     } onQueue:dispatch_get_main_queue() completion:^(EMMessage *message1, EMError *error) {
-//        [EASE.chatManager insertMessageToDB:message1];
+        
     } onQueue:dispatch_get_main_queue()];
-//    [EASE.chatManager insertMessageToDB:message];
-//    self.conversation 
     
     if (error) {
         NSLog(@"error=%@",error);

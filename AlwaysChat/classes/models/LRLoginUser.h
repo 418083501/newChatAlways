@@ -54,6 +54,8 @@ typedef enum{
 
 @property (nonatomic,copy)NSString *token;
 
+@property (nonatomic,strong)NSMutableArray *personArray;
+
 +(instancetype)instance;
 
 -(BOOL)isLogin;
@@ -74,6 +76,6 @@ typedef enum{
 
 -(NSString *)textWithMessageBody:(id<IEMMessageBody>)body;
 
--(void)parseDataWithDict:(NSDictionary *)dict;
+
 
 @end

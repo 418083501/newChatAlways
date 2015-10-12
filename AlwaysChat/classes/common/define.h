@@ -13,7 +13,7 @@
 
 #define Main_Blue_Color @"0000ff"
 
-#define FACE_LOAD [UIImage imageNamed:@""]
+#define FACE_LOAD [UIImage imageNamed:@"default_face"]
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 
