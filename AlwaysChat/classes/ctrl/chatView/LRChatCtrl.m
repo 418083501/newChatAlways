@@ -8,9 +8,27 @@
 
 #import "LRChatCtrl.h"
 
+#import "UIView+propety.h"
+
+#import "LRLocationCtrl.h"
+
 #define SHADOW_TAG @"SHADOW_TAG".hash
 
 #define TOOLS_HEIGHT (200)
+
+
+@interface MyImageView : UIImageView
+
+@property (nonatomic,strong)NSDictionary *userInfo;
+
+@end
+
+@implementation MyImageView
+
+
+
+@end
+
 
 @interface LRChatCtrl ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,IEMChatProgressDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
@@ -76,7 +94,9 @@
         }
             break;
         case 2:
+        {
             
+        }
             break;
         case 3:
             
@@ -245,6 +265,8 @@
 
 #define DETAIL_TAG @"DETAIL_TAG".hash
 
+#define FACE_TAG @"FACE_TAG".hash
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"hehe"];
@@ -253,7 +275,7 @@
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 5, 200, 20)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(45, 5, 200, 20)];
         label.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:label];
         label.tag = TEXTLABEL_TAG;
@@ -263,10 +285,19 @@
         detailTextLabel.tag = DETAIL_TAG;
         [cell.contentView addSubview:detailTextLabel];
         
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
+        imageView.layer.masksToBounds = YES;
+        imageView.layer.cornerRadius = imageView.height/2;
+        imageView.tag = FACE_TAG;
+        [cell.contentView addSubview:imageView];
+        imageView.layer.borderColor = [UIColor blackColor].CGColor;
+        imageView.layer.borderWidth = .5;
+        imageView = nil;
+        
     }
     
     
-    
+    UIImageView *imageView = (UIImageView *)[cell.contentView viewWithTag:FACE_TAG];
     UILabel *textLabel = (UILabel *)[cell.contentView viewWithTag:TEXTLABEL_TAG];
     UILabel *detailTextLabel = (UILabel *)[cell.contentView viewWithTag:DETAIL_TAG];
     
@@ -282,10 +313,14 @@
         }
         
         if (body.messageBodyType == eMessageBodyType_Image) {
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(textLabel.x, textLabel.y + textLabel.height + 5, 100, 100)];
+            UIImageView *imageView = [[MyImageView alloc] initWithFrame:CGRectMake(textLabel.x, textLabel.y + textLabel.height + 5, 100, 100)];
             imageView.layer.masksToBounds = YES;
             imageView.tag = IMAGE_TAG;
             EMImageMessageBody *chatImage = (EMImageMessageBody *)body;
+            
+            imageView.userInteractionEnabled = YES;
+            [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doImageViewClick:)]];
+            imageView.userInfo = @{MESSAGE_USERINFO:message};
             
             if (![LCCommon checkIsEmptyString:chatImage.thumbnailLocalPath]) {
                 
@@ -298,13 +333,79 @@
             
             [cell.contentView addSubview:imageView];
             imageView = nil;
+        }
+        
+        if (body.messageBodyType == eMessageBodyType_Location) {
+            //chat_location_preview
+            UIImageView *imageView = [[MyImageView alloc] initWithFrame:CGRectMake(textLabel.x, textLabel.y + textLabel.height + 5, 100, 100)];
+            imageView.layer.masksToBounds = YES;
+            imageView.userInfo = @{MESSAGE_USERINFO:message};
+            imageView.tag = IMAGE_TAG;
+            imageView.image = [UIImage imageNamed:@"chat_location_preview"];
+            imageView.userInteractionEnabled = YES;
+            [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doImageViewClick:)]];
             
+            [cell.contentView addSubview:imageView];
+            imageView = nil;
+        }
+        
+        
+    }
+    
+    LRBaseUser *user = [LOGIN_USER userWithID:message.from];
+    if (message.from.longLongValue == LOGIN_USER.ID) {
+        user = LOGIN_USER;
+    }
+    
+    textLabel.text = user.name;
+    [imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
+    
+    return cell;
+}
+
+-(void)doImageViewClick:(UIGestureRecognizer *)sender
+{
+    UIImageView *imageView = (UIImageView *)sender.view;
+    EMMessage *message = imageView.userInfo[MESSAGE_USERINFO];
+    
+    if (message.messageBodies.count != 0) {
+        id<IEMMessageBody> body = message.messageBodies[0];
+        
+        switch (body.messageBodyType) {
+            case eMessageBodyType_Location:
+            {
+                EMLocationMessageBody *locationBody = (EMLocationMessageBody *)body;
+                LRLocationCtrl *ctrl = [[LRLocationCtrl alloc] init];
+                ctrl.location = CLLocationCoordinate2DMake(locationBody.latitude, locationBody.longitude);
+                [self.navigationController pushViewController:ctrl animated:YES];
+                ctrl = nil;
+                
+            }
+                break;
+            case eMessageBodyType_Image:
+            {
+                EMImageMessageBody *chatImage = (EMImageMessageBody *)body;
+                UIImageView *showView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+                [self.view addSubview:showView];
+                showView.userInteractionEnabled = YES;
+                [showView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doDismiss:)]];
+                [showView setImageWithURL:[NSURL URLWithString:chatImage.remotePath] placeholderImage:imageView.image];
+            }
+                break;
+                
+            default:
+                break;
         }
         
     }
-    textLabel.text = message.from;
     
-    return cell;
+    
+    
+}
+
+-(void)doDismiss:(UIGestureRecognizer *)sender
+{
+    [sender.view removeFromSuperview];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

@@ -56,6 +56,8 @@ typedef enum{
 
 @property (nonatomic,strong)NSMutableArray *personArray;
 
+-(LRBaseUser *)userWithID:(NSString *)ID;
+
 +(instancetype)instance;
 
 -(BOOL)isLogin;

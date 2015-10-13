@@ -53,15 +53,14 @@ static LRLoginUser *_user;
 
 -(void)logout
 {
-//    if ([LC_LOGINUSER isLogin]) {
-//        [LC_USER_MANAGER logOut];
-//    }
+    if ([self isLogin]) {
+        [LC_USER_MANAGER logout];
+    }
     [LCCommon deleteWithFilepath:[LRLoginUser loginUserLocalPath]];
     
     LCLoginCtrl *ctrl = [[LCLoginCtrl alloc] init];
     LCNavigationController *nav = [[LCNavigationController alloc] initWithRootViewController:ctrl];
     LCAppDelegate.window.rootViewController = nav;
-//    LCAppDelegate.window
     [nav setNavigationBarHidden:YES];
     nav = nil;
     ctrl = nil;
@@ -145,19 +144,33 @@ static LRLoginUser *_user;
     return [videoPath stringByAppendingPathComponent:videoName];
 }
 
--(void)makeSelfWithLocal
-{
-//    self.ID = 10000;
-//    self.name = @"lulu";
-//    self.facePath = @"http://img5.duitang.com/uploads/item/201503/26/20150326161657_aL8FW.jpeg";
-//    self.destrib = @"鹿哥霸气";
-//    self.sex = @"男";
-//    [self saveToLocal];
-}
-
 -(BOOL)isLogin
 {
     return self.ID != 0;
+}
+
+-(LRBaseUser *)userWithID:(NSString *)ID
+{
+    if ([ID isEqualToString:@"admin"]) {
+        LRBaseUser *user = [[LRBaseUser alloc] init];
+        user.ID = 0;
+        user.name = @"admin";
+        user.facePath = @"";
+        return user;
+    }
+    
+    if (!self.personArray) {
+        return nil;
+    }
+    
+    for (LRBaseUser *user in self.personArray) {
+        if (user.ID == ID.longLongValue) {
+            return user;
+        }
+    }
+    
+    return nil;
+    
 }
 
 -(void)didReceiveOfflineMessages:(NSArray *)offlineMessages

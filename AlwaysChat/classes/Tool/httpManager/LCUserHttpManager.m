@@ -129,6 +129,7 @@
             idStr = [idStr stringByAppendingString:@","];
         }
     }
+    paramas[@"ids"] = idStr;
     
     [LCHttpTool post:url params:paramas success:^(id responseObj) {
         NSDictionary *dict = responseObj;
@@ -159,6 +160,28 @@
         }
     } failure:^(NSError *error) {
         callBack(NO,@"链接失败");
+    }];
+    
+}
+
+-(void)logout
+{
+    //Logout
+    NSString *url = [NSString stringWithFormat:@"%@%@",HOST_NAME,@"Logout"];
+    
+    NSMutableDictionary *paramas = [NSMutableDictionary dictionary];
+    paramas[@"uid"] = @(LOGIN_USER.ID);
+    if (![LCCommon checkIsEmptyString:LOGIN_USER.token]) {
+        paramas[@"token"] = LOGIN_USER.token;
+    }
+    
+    [LCHttpTool get:url params:paramas success:^(id responseObj) {
+        if ([self parseIsDoneWithId:responseObj]) {
+//            NSDictionary *dict = responseObj;
+            
+        }
+    } failure:^(NSError *error) {
+        
     }];
     
 }

@@ -53,6 +53,8 @@
 		16E3F9181BC79ABF008A81A1 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F90E1BC79ABF008A81A1 /* AFURLResponseSerialization.m */; settings = {ASSET_TAGS = (); }; };
 		16E3F9191BC79ABF008A81A1 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F9101BC79ABF008A81A1 /* AFURLSessionManager.m */; settings = {ASSET_TAGS = (); }; };
 		16E3F91D1BC79AF2008A81A1 /* LCLoginCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F91C1BC79AF2008A81A1 /* LCLoginCtrl.m */; settings = {ASSET_TAGS = (); }; };
+		16EBC8AB1BCCFD2700347FB1 /* LRLocationCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EBC8AA1BCCFD2700347FB1 /* LRLocationCtrl.m */; settings = {ASSET_TAGS = (); }; };
+		16EBC8AE1BCCFE0F00347FB1 /* UIView+propety.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EBC8AD1BCCFE0F00347FB1 /* UIView+propety.m */; settings = {ASSET_TAGS = (); }; };
 		ABCB7A5B1BB96B2F00AE89D5 /* LRBaseUser.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCB7A5A1BB96B2F00AE89D5 /* LRBaseUser.m */; settings = {ASSET_TAGS = (); }; };
 		ABCB7A5E1BB96B3D00AE89D5 /* LRLoginUser.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCB7A5D1BB96B3D00AE89D5 /* LRLoginUser.m */; settings = {ASSET_TAGS = (); }; };
 		ABCB7A781BB96E4C00AE89D5 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = ABCB7A601BB96E4C00AE89D5 /* LICENSE */; settings = {ASSET_TAGS = (); }; };
@@ -235,6 +237,10 @@
 		16E3F9101BC79ABF008A81A1 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		16E3F91B1BC79AF2008A81A1 /* LCLoginCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCLoginCtrl.h; sourceTree = "<group>"; };
 		16E3F91C1BC79AF2008A81A1 /* LCLoginCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCLoginCtrl.m; sourceTree = "<group>"; };
+		16EBC8A91BCCFD2700347FB1 /* LRLocationCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRLocationCtrl.h; sourceTree = "<group>"; };
+		16EBC8AA1BCCFD2700347FB1 /* LRLocationCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRLocationCtrl.m; sourceTree = "<group>"; };
+		16EBC8AC1BCCFE0F00347FB1 /* UIView+propety.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+propety.h"; sourceTree = "<group>"; };
+		16EBC8AD1BCCFE0F00347FB1 /* UIView+propety.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+propety.m"; sourceTree = "<group>"; };
 		ABCB7A591BB96B2F00AE89D5 /* LRBaseUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRBaseUser.h; sourceTree = "<group>"; };
 		ABCB7A5A1BB96B2F00AE89D5 /* LRBaseUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRBaseUser.m; sourceTree = "<group>"; };
 		ABCB7A5C1BB96B3D00AE89D5 /* LRLoginUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRLoginUser.h; sourceTree = "<group>"; };
@@ -557,6 +563,8 @@
 			children = (
 				166CA4291BBA628C00BDC576 /* LRChatCtrl.h */,
 				166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */,
+				16EBC8A91BCCFD2700347FB1 /* LRLocationCtrl.h */,
+				16EBC8AA1BCCFD2700347FB1 /* LRLocationCtrl.m */,
 			);
 			name = chat;
 			path = chatView;
@@ -706,6 +714,8 @@
 		16D0EDE31BB9491900169466 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				16EBC8AC1BCCFE0F00347FB1 /* UIView+propety.h */,
+				16EBC8AD1BCCFE0F00347FB1 /* UIView+propety.m */,
 				166CA4151BBA2E4900BDC576 /* AppDelegate+EaseMobDebug.h */,
 				166CA4161BBA2E4900BDC576 /* AppDelegate+EaseMobDebug.m */,
 				166CA4121BBA2E1C00BDC576 /* AppDelegate+EaseMob.h */,
@@ -947,6 +957,7 @@
 				16D0EDF81BB9491900169466 /* UIView+Extension.m in Sources */,
 				16D0EDD31BB9488200169466 /* LCTabBar.m in Sources */,
 				ABCB7A5B1BB96B2F00AE89D5 /* LRBaseUser.m in Sources */,
+				16EBC8AB1BCCFD2700347FB1 /* LRLocationCtrl.m in Sources */,
 				ABCB7A801BB96E4C00AE89D5 /* UIButton+WebCache.m in Sources */,
 				16D0EDFA1BB9491900169466 /* UIWindow+Extension.m in Sources */,
 				16E3F8FB1BC79A98008A81A1 /* LCUserHttpManager.m in Sources */,
@@ -962,6 +973,7 @@
 				16E3F9121BC79ABF008A81A1 /* AFHTTPRequestOperationManager.m in Sources */,
 				16E3F9181BC79ABF008A81A1 /* AFURLResponseSerialization.m in Sources */,
 				16E3F9111BC79ABF008A81A1 /* AFHTTPRequestOperation.m in Sources */,
+				16EBC8AE1BCCFE0F00347FB1 /* UIView+propety.m in Sources */,
 				16D0EE011BB94CD800169466 /* LRMainCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

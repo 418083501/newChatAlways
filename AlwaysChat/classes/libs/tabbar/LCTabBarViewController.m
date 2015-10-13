@@ -77,13 +77,13 @@
     [super viewDidLoad];
     
     LRMainCtrl *main = [[LRMainCtrl alloc] init];
-    [self addChildVc:main title:@"消息" image:@"" selectedImage:@""];
+    [self addChildVc:main title:@"消息" image:@"tab_home_n" selectedImage:@"tab_home_c"];
     
     LRFindCtrl *find = [[LRFindCtrl alloc] init];
-    [self addChildVc:find title:@"发现" image:@"" selectedImage:@""];
+    [self addChildVc:find title:@"发现" image:@"tab_find_n" selectedImage:@"tab_find_c"];
     
     LRMeCtrl *me = [[LRMeCtrl alloc] init];
-    [self addChildVc:me title:@"我的" image:@"" selectedImage:@""];
+    [self addChildVc:me title:@"我的" image:@"tab_me_n" selectedImage:@"tab_me_c"];
     
     // 1.初始化子控制器
 //    SSMainViewController *viewController = [[SSMainViewController alloc] init];
@@ -196,11 +196,11 @@
     
     // 先给外面传进来的小控制器 包装 一个导航控制器
     LCNavigationController *nav = [[LCNavigationController alloc] initWithRootViewController:childVc];
-//    nav.extendedLayoutIncludesOpaqueBars=NO;
-//    
-//    nav.edgesForExtendedLayout = UIRectEdgeNone;
-//    
-//    nav.automaticallyAdjustsScrollViewInsets=NO;
+    nav.extendedLayoutIncludesOpaqueBars=NO;
+//
+    nav.edgesForExtendedLayout = UIRectEdgeNone;
+//
+    nav.automaticallyAdjustsScrollViewInsets=NO;
     
     // 添加为子控制器
     [self addChildViewController:nav];

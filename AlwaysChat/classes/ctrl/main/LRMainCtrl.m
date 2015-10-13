@@ -41,31 +41,64 @@
     conversation = nil;
 }
 
+#define TEXTLABEL_TAG @"TEXTLABEL_TAG".hash
+
+#define DETAIL_TAG @"DETAIL_TAG".hash
+
+#define FACE_TAG @"FACE_TAG".hash
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"hehe"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"hehe"];
+        cell.imageView.layer.masksToBounds = YES;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(45, 5, 200, 20)];
+        label.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:label];
+        label.tag = TEXTLABEL_TAG;
+        
+        UILabel *detailTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(label.x, label.height + label.y + 3, (self.view.width - label.x *2), 13)];
+        detailTextLabel.font = [UIFont systemFontOfSize:12];
+        detailTextLabel.tag = DETAIL_TAG;
+        [cell.contentView addSubview:detailTextLabel];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
+        imageView.layer.masksToBounds = YES;
+        imageView.layer.cornerRadius = imageView.height/2;
+        imageView.tag = FACE_TAG;
+        [cell.contentView addSubview:imageView];
+        imageView.layer.borderColor = [UIColor blackColor].CGColor;
+        imageView.layer.borderWidth = .5;
+        imageView = nil;
+        
     }
+    
+    
+    UIImageView *imageView = (UIImageView *)[cell.contentView viewWithTag:FACE_TAG];
+    UILabel *textLabel = (UILabel *)[cell.contentView viewWithTag:TEXTLABEL_TAG];
+    UILabel *detailTextLabel = (UILabel *)[cell.contentView viewWithTag:DETAIL_TAG];
     
     EMConversation *conversation = _dataArray[indexPath.row];
     
     EMMessage *message = [conversation latestMessage];
     
-    LRBaseUser *user = [[LRBaseUser alloc] init];
-    user.ID = conversation.chatter.longLongValue;
-    user = [LOGIN_USER.personArray objectAtIndex:[LOGIN_USER.personArray indexOfObject:user]];
+//    LRBaseUser *user = [[LRBaseUser alloc] init];
+//    user.ID = conversation.chatter.longLongValue;
+//    user = [LOGIN_USER.personArray objectAtIndex:[LOGIN_USER.personArray indexOfObject:user]];
+    LRBaseUser *user = [LOGIN_USER userWithID:conversation.chatter];
     
-    [cell.imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
+    [imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
     
-    cell.textLabel.text = conversation.chatter;
+    textLabel.text = user.name;
     
     if (message.messageBodies.count != 0) {
         id<IEMMessageBody> body = message.messageBodies[0];
-        cell.detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
+        detailTextLabel.text = [LOGIN_USER textWithMessageBody:body];
     }else
     {
-        cell.detailTextLabel.text = nil;
+        detailTextLabel.text = nil;
     }
     
     return cell;
@@ -97,8 +130,6 @@
     if (_isFirst) {
         [self buildLayout];
         _isFirst = NO;
-        
-        
     }
     
     [_tableView reloadData];
@@ -127,17 +158,30 @@
     
     _dataArray = [EASE.chatManager conversations].mutableCopy;
     [_tableView reloadData];
-    NSMutableArray *array = [NSMutableArray array];
     
-    for (EMConversation *conversation in _dataArray) {
-        [array addObject:conversation.chatter];
+    if (_dataArray.count > 0) {
+        NSMutableArray *array = [NSMutableArray array];
+        
+        for (EMConversation *conversation in _dataArray) {
+            [array addObject:conversation.chatter];
+        }
+        
+        for (LRBaseUser *user in LOGIN_USER.personArray) {
+            NSString *ID = [NSString stringWithFormat:@"%lld",user.ID];
+            if ([array containsObject:ID]) {
+                [array removeObject:ID];
+            }
+        }
+        
+        if (array.count > 0) {
+            [LC_USER_MANAGER getBaseUsersWithIds:array callBack:^(BOOL rs, NSObject *__weak obj) {
+                if (rs) {
+                    [_tableView reloadData];
+                }
+            }];
+        }
     }
     
-    [LC_USER_MANAGER getBaseUsersWithIds:array callBack:^(BOOL rs, NSObject *__weak obj) {
-        if (rs) {
-            [_tableView reloadData];
-        }
-    }];
 }
 
 - (void)viewDidLoad {
@@ -152,15 +196,15 @@
 {
     login_state state = [notification.userInfo[@"state"] intValue];
     if (state == login_state_fail) {
-        self.title = @"消息(未连接)";
+        self.navigationController.title = @"消息(未连接)";
     }
     
     if (state == login_state_ready) {
-        self.title = @"消息(登录中)";
+        self.navigationController.title = @"消息(登录中)";
     }
     
     if (state == login_state_suc) {
-        self.title = @"消息";
+        self.navigationController.title = @"消息";
         [self onMessageCallBack:notification];
     }
 }

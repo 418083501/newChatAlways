@@ -421,6 +421,23 @@
         [EASE.chatManager asyncFetchMessageThumbnail:message progress:nil];
     }
 }
+#warning 自动重连
+-(void)didAutoReconnectFinishedWithError:(NSError *)error
+{
+    if (!error) {
+        LOGIN_USER.state = login_state_suc;
+    }else
+    {
+        LOGIN_USER.state = login_state_fail;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(LOGIN_USER.state)}];
+}
+#warning 将要自动重连
+-(void)willAutoReconnect
+{
+    LOGIN_USER.state = login_state_ready;
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOGIN_STATE_CHANGED object:nil userInfo:@{@"state":@(LOGIN_USER.state)}];
+}
 
 // 打印收到的apns信息
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo

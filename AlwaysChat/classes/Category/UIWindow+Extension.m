@@ -43,7 +43,7 @@
             
         }];
         
-        LCTabBarViewController *tab = [[LCTabBarViewController alloc]init];
+        LCTabBarViewController *tab = [[LCTabBarViewController alloc] init];
         
         self.rootViewController = tab;
         
