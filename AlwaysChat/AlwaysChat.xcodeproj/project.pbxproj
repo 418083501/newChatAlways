@@ -41,6 +41,8 @@
 		16D0EE011BB94CD800169466 /* LRMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EE001BB94CD800169466 /* LRMainCtrl.m */; settings = {ASSET_TAGS = (); }; };
 		16D0EE041BB94CE400169466 /* LRMeCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EE031BB94CE400169466 /* LRMeCtrl.m */; settings = {ASSET_TAGS = (); }; };
 		16D0EE071BB94CF100169466 /* LRFindCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EE061BB94CF100169466 /* LRFindCtrl.m */; settings = {ASSET_TAGS = (); }; };
+		16DE98CA1BCDFE9200F43BDC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DE98C91BCDFE9200F43BDC /* AVFoundation.framework */; };
+		16DE98CC1BCE685500F43BDC /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DE98CB1BCE685500F43BDC /* MediaPlayer.framework */; };
 		16E3F8FB1BC79A98008A81A1 /* LCUserHttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F8F61BC79A98008A81A1 /* LCUserHttpManager.m */; settings = {ASSET_TAGS = (); }; };
 		16E3F8FC1BC79A98008A81A1 /* LCHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F8FA1BC79A98008A81A1 /* LCHttpTool.m */; settings = {ASSET_TAGS = (); }; };
 		16E3F9111BC79ABF008A81A1 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F8FF1BC79ABF008A81A1 /* AFHTTPRequestOperation.m */; settings = {ASSET_TAGS = (); }; };
@@ -210,6 +212,8 @@
 		16D0EE031BB94CE400169466 /* LRMeCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRMeCtrl.m; sourceTree = "<group>"; };
 		16D0EE051BB94CF100169466 /* LRFindCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRFindCtrl.h; sourceTree = "<group>"; };
 		16D0EE061BB94CF100169466 /* LRFindCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRFindCtrl.m; sourceTree = "<group>"; };
+		16DE98C91BCDFE9200F43BDC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		16DE98CB1BCE685500F43BDC /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		16E3F8F41BC79A98008A81A1 /* httpHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = httpHeader.h; sourceTree = "<group>"; };
 		16E3F8F51BC79A98008A81A1 /* LCUserHttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCUserHttpManager.h; sourceTree = "<group>"; };
 		16E3F8F61BC79A98008A81A1 /* LCUserHttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCUserHttpManager.m; sourceTree = "<group>"; };
@@ -272,6 +276,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16DE98CC1BCE685500F43BDC /* MediaPlayer.framework in Frameworks */,
+				16DE98CA1BCDFE9200F43BDC /* AVFoundation.framework in Frameworks */,
 				166CA4271BBA318900BDC576 /* libxml2.tbd in Frameworks */,
 				166CA4251BBA318200BDC576 /* libresolv.tbd in Frameworks */,
 				166CA4231BBA317A00BDC576 /* libiconv.tbd in Frameworks */,
@@ -573,6 +579,8 @@
 		16D0EDA21BB947E300169466 = {
 			isa = PBXGroup;
 			children = (
+				16DE98CB1BCE685500F43BDC /* MediaPlayer.framework */,
+				16DE98C91BCDFE9200F43BDC /* AVFoundation.framework */,
 				166CA4261BBA318900BDC576 /* libxml2.tbd */,
 				166CA4241BBA318200BDC576 /* libresolv.tbd */,
 				166CA4221BBA317A00BDC576 /* libiconv.tbd */,

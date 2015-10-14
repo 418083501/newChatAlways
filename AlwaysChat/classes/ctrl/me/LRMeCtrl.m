@@ -139,6 +139,16 @@
     label.text = LOGIN_USER.name;
     [contentView addSubview:label];
     
+    UILabel *dLabel = [[UILabel alloc] initWithFrame:CGRectMake(label.x, label.height + label.y + 5, 200, 1000)];
+    dLabel.backgroundColor = [UIColor clearColor];
+    dLabel.textColor = [UIColor blackColor];
+    dLabel.font = [UIFont systemFontOfSize:10];
+    dLabel.numberOfLines = 0;
+    dLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    dLabel.text = LOGIN_USER.destrib;
+    [dLabel sizeToFit];
+    [contentView addSubview:dLabel];
+    
     _tableView.tableHeaderView = view;
     
 }

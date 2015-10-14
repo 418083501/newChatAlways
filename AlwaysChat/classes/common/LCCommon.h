@@ -21,6 +21,11 @@
 +(NSArray*)getFilenamesWithDir:(NSString*)dir;
 +(NSString *)getUnitNumber:(NSInteger)number;
 
+
++ (NSString *)genareteVideoPath;
+
++(NSString *)genareteDefaultVideoPath;
+
 /**
  *  通过颜色值获得颜色
  */

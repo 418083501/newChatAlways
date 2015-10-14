@@ -264,6 +264,7 @@ static LRLoginUser *_user;
 //        AUTO_CODER(token, @"token");
         self.messageList = [[coder decodeObjectForKey:@"messageList"] mutableCopy];
         AUTO_CODER(token, @"token");
+        AUTO_CODER(destrib, @"destrib");
     }
     return self;
 }
@@ -280,6 +281,7 @@ static LRLoginUser *_user;
     AUTO_ECODE(facePath, @"facePath");
     AUTO_ECODE(name, @"name");
     AUTO_ECODE(token, @"token");
+    AUTO_ECODE(destrib, @"destrib");
 //    AUTO_ECODE(token, @"token");
 //    AUTO_ECODE(userDept, @"userDept");
     [aCoder encodeObject:self.messageList forKey:@"messageList"];
@@ -294,6 +296,7 @@ static LRLoginUser *_user;
     self.username = dict[@"username"];
     self.sex = dict[@"sex"];
     self.facePath = dict[@"facePath"];
+    self.destrib = dict[@"destrib"];
     
     [self saveToLocal];
     if ([self isLogin]) {

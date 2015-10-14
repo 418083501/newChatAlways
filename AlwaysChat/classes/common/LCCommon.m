@@ -28,6 +28,22 @@
     return fullPicPath;
 }
 
++ (NSString *)genareteVideoPath{
+    
+    NSString * picPath = [self getDirectoryForDocuments:@"video"];
+    NSString * picName = [NSString stringWithFormat:@"%@.mp4",[self curremtTimeStr]];
+    NSString * fullPicPath  = [picPath stringByAppendingPathComponent:picName];
+    return fullPicPath;
+}
+
++ (NSString *)genareteDefaultVideoPath{
+    
+    NSString * picPath = [self getDirectoryForDocuments:@"video"];
+    NSString * picName = [NSString stringWithFormat:@"%@.mp4",@"sendVideo"];
+    NSString * fullPicPath  = [picPath stringByAppendingPathComponent:picName];
+    return fullPicPath;
+}
+
 + (NSString *)curremtTimeStr{
     
     NSDate * date = [NSDate date];
