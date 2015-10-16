@@ -298,7 +298,7 @@
                 } break;
                 case AVAssetExportSessionStatusCompleted: {
                     NSLog(@"completed.");
-                    callBack(YES,[mp4Url absoluteString]);
+                    callBack(YES,[mp4Url relativePath]);
                 } break;
                 default: {
                     NSLog(@"others.");
@@ -644,7 +644,9 @@
         [_dataArray addObject:message];
     }
     [_tableView reloadData];
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    if (_dataArray.count > 0) {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    }
 }
 
 -(void)buildLayout
@@ -657,7 +659,9 @@
     [self.view addSubview:_tableView];
 //    _dataArray = [self.conversation loadNumbersOfMessages:30 before:.0].mutableCopy;
     _dataArray = [self.conversation loadNumbersOfMessages:20 withMessageId:nil].mutableCopy;
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    if (_dataArray.count > 0) {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    }
     _gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onShadowTouched:)];
     [self.view addSubview:self.toolsView];
 }

@@ -9,11 +9,10 @@
 #import "LRBaseUser.h"
 #import "EMMessage.h"
 
-
-
 #import "LCUserHttpManager.h"
 
 @class LRChatCtrl;
+@class LRGroupInfo;
 
 #define LOGIN_STATE_CHANGED @"LOGIN_STATE_CHANGED"
 
@@ -50,6 +49,8 @@ typedef enum{
 
 @property (nonatomic,strong)NSMutableArray *messageList;
 
+@property (nonatomic,strong)NSMutableArray *groupList;
+
 @property (nonatomic,assign)LRChatCtrl *controller;
 
 @property (nonatomic,copy)NSString *token;
@@ -57,6 +58,8 @@ typedef enum{
 @property (nonatomic,strong)NSMutableArray *personArray;
 
 -(LRBaseUser *)userWithID:(NSString *)ID;
+
+-(LRGroupInfo *)groupWithID:(NSString *)ID;
 
 +(instancetype)instance;
 

@@ -9,6 +9,7 @@
 #import "LRMainCtrl.h"
 #import "LRBaseUser.h"
 #import "LRChatCtrl.h"
+#import "LRGroupInfo.h"
 
 @interface LRMainCtrl ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -87,11 +88,20 @@
 //    LRBaseUser *user = [[LRBaseUser alloc] init];
 //    user.ID = conversation.chatter.longLongValue;
 //    user = [LOGIN_USER.personArray objectAtIndex:[LOGIN_USER.personArray indexOfObject:user]];
-    LRBaseUser *user = [LOGIN_USER userWithID:conversation.chatter];
-    
-    [imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
-    
-    textLabel.text = user.name;
+    if (conversation.conversationType == eConversationTypeChat) {
+        LRBaseUser *user = [LOGIN_USER userWithID:conversation.chatter];
+        
+        [imageView setImageWithURL:[NSURL URLWithString:user.facePath] placeholderImage:FACE_LOAD];
+        
+        textLabel.text = user.name;
+    }else
+    {
+        LRGroupInfo *group = [LOGIN_USER groupWithID:conversation.chatter];
+        
+        [imageView setImageWithURL:[NSURL URLWithString:group.facePath] placeholderImage:FACE_LOAD];
+        
+        textLabel.text = group.name;
+    }
     
     if (message.messageBodies.count != 0) {
         id<IEMMessageBody> body = message.messageBodies[0];
@@ -122,6 +132,25 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return .5;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return  UITableViewCellEditingStyleDelete;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        EMConversation *conversation = _dataArray[indexPath.row];
+        [EASE.chatManager removeConversationByChatter:conversation.chatter deleteMessages:YES append2Chat:YES];
+        [self onMessageCallBack:nil];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -156,20 +185,33 @@
 {
 //    _dataArray = LOGIN_USER.messageList;    [EASE.chatManager loadAllConversationsFromDatabaseWithAppend2Chat:YES].mutableCopy;
     
-    _dataArray = [EASE.chatManager conversations].mutableCopy;
+    _dataArray = [EASE.chatManager loadAllConversationsFromDatabaseWithAppend2Chat:YES].mutableCopy;
     [_tableView reloadData];
     
     if (_dataArray.count > 0) {
         NSMutableArray *array = [NSMutableArray array];
+        NSMutableArray *groupArray = [NSMutableArray array];
         
         for (EMConversation *conversation in _dataArray) {
-            [array addObject:conversation.chatter];
+            if (conversation.conversationType == eConversationTypeChat) {
+                [array addObject:conversation.chatter];
+            }else
+            {
+                [groupArray addObject:conversation.chatter];
+            }
         }
         
         for (LRBaseUser *user in LOGIN_USER.personArray) {
             NSString *ID = [NSString stringWithFormat:@"%lld",user.ID];
             if ([array containsObject:ID]) {
                 [array removeObject:ID];
+            }
+        }
+        
+        for (LRGroupInfo *group in LOGIN_USER.groupList) {
+            NSString *ID = group.ID;
+            if ([groupArray containsObject:ID]) {
+                [groupArray removeObject:ID];
             }
         }
         
@@ -180,6 +222,16 @@
                 }
             }];
         }
+        
+        if (groupArray.count > 0) {
+#warning 获取群组信息
+            [LC_USER_MANAGER getBaseGroupWithIds:groupArray callBack:^(BOOL rs, NSObject *__weak obj) {
+                if (rs) {
+                    [_tableView reloadData];
+                }
+            }];
+        }
+        
     }
     
 }

@@ -379,6 +379,11 @@
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.agreedAndJoined", @"agreed and joined the group of \'%@\'"), groupTag];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
+    
+//    LOGIN_USER.controller
+    [EASE.chatManager conversationForChatter:group.groupId conversationType:eConversationTypeGroupChat];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MAIN_REFRESH object:nil];
+    
 }
 
 

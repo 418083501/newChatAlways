@@ -10,6 +10,7 @@
 #import "NSString+MKNetworkKitAdditions.h"
 #import "AFNetworking.h"
 #import "LRLoginUser.h"
+#import "LRGroupInfo.h"
 
 @implementation LCUserHttpManager
 
@@ -152,6 +153,59 @@
                 [LOGIN_USER.personArray removeObjectsInArray:result];
                 [LOGIN_USER.personArray addObjectsFromArray:result];
             }
+            
+            callBack(YES,result);
+        }else
+        {
+            callBack(NO,dict[@"result"]);
+        }
+    } failure:^(NSError *error) {
+        callBack(NO,@"链接失败");
+    }];
+    
+}
+
+-(void)getBaseGroupWithIds:(NSArray *)ids callBack:(NetObjLCallBackBlock)callBack
+{
+    //GetBasicUser
+    NSString *url = [NSString stringWithFormat:@"%@%@",HOST_NAME,@"getGroupInfo"];
+    
+    NSMutableDictionary *paramas = [NSMutableDictionary dictionary];
+    paramas[@"uid"] = @(LOGIN_USER.ID);
+    if (![LCCommon checkIsEmptyString:LOGIN_USER.token]) {
+        paramas[@"token"] = LOGIN_USER.token;
+    }
+    NSString *idStr = @"";
+    for (int i = 0; i<ids.count; i++) {
+        idStr = [idStr stringByAppendingFormat:@"%@",ids[i]];
+        if (i != ids.count - 1) {
+            idStr = [idStr stringByAppendingString:@","];
+        }
+    }
+    paramas[@"ids"] = idStr;
+    
+    [LCHttpTool post:url params:paramas success:^(id responseObj) {
+        NSDictionary *dict = responseObj;
+        
+        if ([self parseIsDoneWithId:dict]) {
+            
+            NSMutableArray *result = [NSMutableArray array];
+            
+            NSArray *data = dict[@"data"];
+            for (int i = 0; i<data.count; i++) {
+                NSDictionary *dict = data[i];
+                LRGroupInfo *info = [[LRGroupInfo alloc] init];
+                [info parseDataWithDict:dict];
+                [result addObject:info];
+                info = nil;
+            }
+            
+            if (!LOGIN_USER.groupList) {
+                LOGIN_USER.groupList = [NSMutableArray array];
+                
+            }
+            [LOGIN_USER.groupList removeObjectsInArray:result];
+            [LOGIN_USER.groupList addObjectsFromArray:result];
             
             callBack(YES,result);
         }else

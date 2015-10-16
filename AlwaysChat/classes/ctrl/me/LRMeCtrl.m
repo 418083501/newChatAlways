@@ -75,6 +75,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView cellForRowAtIndexPath:indexPath].selected = NO;
+    if (indexPath.section == 2 && indexPath.row == 0) {
+        [LOGIN_USER logout];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated

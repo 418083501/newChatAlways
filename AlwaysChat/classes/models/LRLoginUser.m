@@ -14,6 +14,8 @@
 
 #import "AppDelegate.h"
 
+#import "LRGroupInfo.h"
+
 @implementation LRLoginUser
 
 
@@ -66,6 +68,12 @@ static LRLoginUser *_user;
     ctrl = nil;
     
     _user = nil;
+    
+    [EASE.chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error) {
+        if (!error && info) {
+            NSLog(@"退出成功");
+        }
+    } onQueue:nil];
     
 }
 
@@ -147,6 +155,20 @@ static LRLoginUser *_user;
 -(BOOL)isLogin
 {
     return self.ID != 0;
+}
+
+-(LRGroupInfo *)groupWithID:(NSString *)ID
+{
+    if (!self.groupList) {
+        return nil;
+    }
+    
+    for (LRGroupInfo *group in self.groupList) {
+        if ([group.ID isEqualToString:ID]) {
+            return group;
+        }
+    }
+    return nil;
 }
 
 -(LRBaseUser *)userWithID:(NSString *)ID

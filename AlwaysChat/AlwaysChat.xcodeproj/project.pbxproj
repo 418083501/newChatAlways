@@ -21,6 +21,7 @@
 		166CA4251BBA318200BDC576 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 166CA4241BBA318200BDC576 /* libresolv.tbd */; };
 		166CA4271BBA318900BDC576 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 166CA4261BBA318900BDC576 /* libxml2.tbd */; };
 		166CA42B1BBA628C00BDC576 /* LRChatCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */; settings = {ASSET_TAGS = (); }; };
+		16C56E2A1BD09BBB00631753 /* LRGroupInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C56E291BD09BBB00631753 /* LRGroupInfo.m */; settings = {ASSET_TAGS = (); }; };
 		16D0EDB01BB947E300169466 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EDAF1BB947E300169466 /* main.m */; };
 		16D0EDB31BB947E300169466 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EDB21BB947E300169466 /* AppDelegate.m */; };
 		16D0EDBE1BB947E300169466 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16D0EDBD1BB947E300169466 /* Assets.xcassets */; };
@@ -172,6 +173,8 @@
 		166CA4261BBA318900BDC576 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		166CA4291BBA628C00BDC576 /* LRChatCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRChatCtrl.h; sourceTree = "<group>"; };
 		166CA42A1BBA628C00BDC576 /* LRChatCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRChatCtrl.m; sourceTree = "<group>"; };
+		16C56E281BD09BBB00631753 /* LRGroupInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRGroupInfo.h; sourceTree = "<group>"; };
+		16C56E291BD09BBB00631753 /* LRGroupInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRGroupInfo.m; sourceTree = "<group>"; };
 		16D0EDAB1BB947E300169466 /* AlwaysChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlwaysChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16D0EDAF1BB947E300169466 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16D0EDB11BB947E300169466 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -836,6 +839,8 @@
 				ABCB7A5A1BB96B2F00AE89D5 /* LRBaseUser.m */,
 				ABCB7A5C1BB96B3D00AE89D5 /* LRLoginUser.h */,
 				ABCB7A5D1BB96B3D00AE89D5 /* LRLoginUser.m */,
+				16C56E281BD09BBB00631753 /* LRGroupInfo.h */,
+				16C56E291BD09BBB00631753 /* LRGroupInfo.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -967,6 +972,7 @@
 				ABCB7A5B1BB96B2F00AE89D5 /* LRBaseUser.m in Sources */,
 				16EBC8AB1BCCFD2700347FB1 /* LRLocationCtrl.m in Sources */,
 				ABCB7A801BB96E4C00AE89D5 /* UIButton+WebCache.m in Sources */,
+				16C56E2A1BD09BBB00631753 /* LRGroupInfo.m in Sources */,
 				16D0EDFA1BB9491900169466 /* UIWindow+Extension.m in Sources */,
 				16E3F8FB1BC79A98008A81A1 /* LCUserHttpManager.m in Sources */,
 				16E3F91D1BC79AF2008A81A1 /* LCLoginCtrl.m in Sources */,
